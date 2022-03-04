@@ -1,25 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, Grid, makeStyles } from '@material-ui/core'
+import Header from 'components/layout/Header';
+import { Route, Switch } from 'react-router';
+import routes from 'utility/routes';
+import PageNotFound from 'pages/PageNotFound';
+import { BrowserRouter } from 'react-router-dom';
+
+const useStyles = makeStyles(theme=> ({
+  main: {
+    flexGrow: 1,
+    margin: theme.spacing(4,'auto')
+  }
+}));
 
 function App() {
+
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Header />  
+      <Container component='main' className={classes.main}>
+        <BrowserRouter>
+          <Switch>
+                {
+                    Object.values(routes).map( route=> (
+                        <Route 
+                            path={route.path} 
+                            key={route.path}
+                            exact 
+                            component={route.Component}
+                        />
+                    ))
+                }
+                <Route component={PageNotFound}/>
+            </Switch>
+        </BrowserRouter>
+      </Container>
+    </React.Fragment>
   );
 }
 
