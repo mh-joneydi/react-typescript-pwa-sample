@@ -15,7 +15,7 @@ const Home = () => {
 
   const dispatch = useAppDispatch(),
   classes = useStyles(),
-  products = useAppSelector( state=> state.products && Object.values(state.products) );
+  products = useAppSelector( state=> state.products.all && Object.values(state.products.all) );
 
   React.useEffect(()=> {
     dispatch( fetchProducts() )

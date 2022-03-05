@@ -6,9 +6,11 @@ import store from 'store';
 import appTheme from 'theme/appTheme';
 import App from './App';
 import 'swiper/css'; // core Swiper
+import "swiper/css/free-mode";
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'react-image-lightbox/style.css' // css of react light box
+import "swiper/css/thumbs";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

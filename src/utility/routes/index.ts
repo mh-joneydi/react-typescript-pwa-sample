@@ -1,5 +1,6 @@
 import Route from "lib/router/Route";
 import Home from "pages/Home";
+import ProductDetails from "pages/ProductDetails";
 
 
 /**
@@ -9,7 +10,7 @@ import Home from "pages/Home";
  */
 const routes = {
     home: new Route('/', 'صفحه نخست', Home),
-    
+    productInfo: new Route<{ productId: string }>('/products/:productId', 'جزئیات آگهی', ProductDetails),
 };
 
 export default routes;

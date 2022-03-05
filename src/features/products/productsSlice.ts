@@ -14,12 +14,13 @@ export interface IProductDetails {
 }
 
 export type IProductsSliceState = {
-    [productId: string]: IProductDetails
-} | null
+    all: { [productId: string]: IProductDetails } | null
+    details: { [productId: string]: IProductDetails }
+}
 
 
 export const fetchProducts = createAsyncThunk(
-    'news/newsSocialMedias',
+    'products/fetchProducts',
     async function() {
         const { data: products } = await APICall<IProductDetails[]>({
             url: '/products',
@@ -30,14 +31,32 @@ export const fetchProducts = createAsyncThunk(
     }
 )
 
-const initialState = null;
+export const fetchProductsDetails = createAsyncThunk(
+    'products/fetchProductsDetails',
+    async function(productId: string) {
+        const { data: productInfo } = await APICall<IProductDetails>({
+            url: `/products/${productId}`,
+            method: 'GET',
+        });
+
+        return productInfo;
+    }
+)
+
+const initialState: IProductsSliceState = {
+    all: null,
+    details: {}
+};
 
 const productsSlice = createReducer<IProductsSliceState>(
     initialState,
     (builder) => {
         builder
             .addCase( fetchProducts.fulfilled, ( state, action: PayloadAction<IProductDetails[]> )=> {
-                return mapkeys(action.payload, 'id');
+                state.all =  mapkeys(action.payload, 'id');
+            })
+            .addCase( fetchProductsDetails.fulfilled, (state, action: PayloadAction<IProductDetails> )=> {
+                state.details[action.payload.id] = action.payload;
             })
     }
 );
