@@ -74,7 +74,7 @@ const Header = () => {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <Grid container spacing={3} wrap='nowrap'>    
+                        <Grid container spacing={3} wrap='nowrap' alignItems='center'>    
                             <Grid item dir='ltr'>
                                 <Button endIcon={<FiUser />}>پروفایل</Button>
                             </Grid>
