@@ -12,7 +12,8 @@ import { RiChat1Fill } from 'react-icons/ri';
 const useStyles = makeStyles(theme=> ({
   main: {
     flexGrow: 1,
-    margin: theme.spacing(4,'auto')
+    margin: theme.spacing(4,'auto'),
+    overflow: 'hidden'
   },
   bottomNavigation: {
     alignItems: 'stretch',
@@ -42,14 +43,13 @@ const App: React.FC<WithWidthProps> = ({ width })=> {
   isMobile = isWidthDown('sm', width!);
 
   return (
-    <React.Fragment>
+    <BrowserRouter>
       {
         isMobile
         ? <MobileHeader />
         : <Header />
       }
       <Container component='main' className={classes.main}>
-        <BrowserRouter>
           <Switch>
                 {
                     Object.values(routes).map( route=> (
@@ -63,7 +63,6 @@ const App: React.FC<WithWidthProps> = ({ width })=> {
                 }
                 <Route component={PageNotFound}/>
             </Switch>
-        </BrowserRouter>
       </Container>
       {
         isMobile && (
@@ -76,7 +75,7 @@ const App: React.FC<WithWidthProps> = ({ width })=> {
           </BottomNavigation>
         )
       }
-    </React.Fragment>
+    </BrowserRouter>
   );
 }
 

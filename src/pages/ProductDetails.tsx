@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme=> ({
         lineHeight: '34px',
         whiteSpace: 'pre-wrap',
     },
+    breadCrumbs: {
+        marginBottom: theme.spacing(2)
+    },
     swiper: {
 
     },
@@ -47,9 +50,9 @@ const ProductDetails = () => {
     }, [productId, dispatch]);
 
     return product ? (
-        <Container maxWidth='md'>
-            <Grid container direction='row-reverse' justifyContent='space-between' spacing={4}>
-                <Grid item container spacing={1}>
+        <Container maxWidth='md' disableGutters>
+            <Grid container direction='row-reverse' justifyContent='space-between' spacing={2}>
+                <Grid item container spacing={1} className={classes.breadCrumbs}>
                     {
                         [...new Array(3)].map(()=> (
                             <React.Fragment>
@@ -119,10 +122,10 @@ const ProductDetails = () => {
                             </Grid>
                             <Grid item>
                                 <IconButton>
-                                    <HiOutlineBookmark />
+                                    <HiOutlineBookmark size={18} />
                                 </IconButton>
                                 <IconButton>
-                                    <HiOutlineShare />
+                                    <HiOutlineShare size={18} />
                                 </IconButton>
                             </Grid>
                         </Grid>

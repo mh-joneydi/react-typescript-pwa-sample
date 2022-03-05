@@ -40,7 +40,7 @@ const appTheme = createTheme({
     values: {
       xs: 0,
       sm: 768, 
-      md: 1040, 
+      md: 980, 
       lg: 1440,
       xl: 1920
     }

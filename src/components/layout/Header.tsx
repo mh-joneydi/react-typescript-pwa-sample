@@ -3,6 +3,8 @@ import { ReactComponent as Logo } from 'assets/images/logo.svg';
 import { FiChevronDown, FiMapPin, FiMessageCircle, FiUser,  } from "react-icons/fi";
 import { IoSearch } from 'react-icons/io5';
 import React from 'react'
+import { Link } from 'react-router-dom';
+import routes from 'utility/routes';
 
 const useStyles = makeStyles(theme=> ({
     appBar: {
@@ -44,7 +46,9 @@ const Header = () => {
                             <Grid item>
                                 <Grid container wrap='nowrap'>
                                     <Grid item>
-                                        <Logo width={50} style={{ verticalAlign: 'middle' }} />
+                                        <Link to={routes.home.returnURL()}>
+                                            <Logo width={50} style={{ verticalAlign: 'middle' }} />
+                                        </Link>
                                     </Grid>
                                     <Divider variant='middle' flexItem orientation="vertical" />
                                     <Grid item dir='ltr'>
