@@ -8,12 +8,17 @@ import { BrowserRouter } from 'react-router-dom';
 import MobileHeader from 'components/layout/MobileHeader';
 import { IoAddCircle, IoList, IoLogoReact, IoPerson } from 'react-icons/io5';
 import { RiChat1Fill } from 'react-icons/ri';
+import GlobalAlert from 'components/core/GlobalAlert';
+import ImageLightBox from 'components/core/ImageLightBox';
 
 const useStyles = makeStyles(theme=> ({
   main: {
     flexGrow: 1,
-    margin: theme.spacing(4,'auto'),
-    overflow: 'hidden'
+    margin: theme.spacing(4,'auto', 10),
+    position: 'relative',
+    [theme.breakpoints.down('sm')]: {
+      overflow: 'hidden',
+    }
   },
   bottomNavigation: {
     alignItems: 'stretch',
@@ -75,6 +80,8 @@ const App: React.FC<WithWidthProps> = ({ width })=> {
           </BottomNavigation>
         )
       }
+      <GlobalAlert />
+      <ImageLightBox />
     </BrowserRouter>
   );
 }

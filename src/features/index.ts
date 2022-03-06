@@ -1,12 +1,14 @@
 import { combineReducers } from "@reduxjs/toolkit"
 import alertSlice from "./alert/alertSlice";
+import imageLightBoxSlice from "./imageLightBox/imageLightBoxSlice";
 import productsSlice from "./products/productsSlice";
 
 
 // combined redecucers (Root Reducer)
 const AppReducer = combineReducers ({
     globalAlert: alertSlice,
-    products: productsSlice
+    products: productsSlice,
+    globalLightBox: imageLightBoxSlice,
 });
 
 // When the user is logged out store will be cleaned up

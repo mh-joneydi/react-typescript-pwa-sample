@@ -40,7 +40,7 @@ const appTheme = createTheme({
     values: {
       xs: 0,
       sm: 768, 
-      md: 980, 
+      md: 1000, 
       lg: 1440,
       xl: 1920
     }
@@ -202,14 +202,6 @@ const appTheme = createTheme({
     },
     MuiCssBaseline: {
       '@global': {
-        '*:not(input, textarea)': {
-          'user-select': 'none', 
-          '-moz-user-select': 'none', /* Firefox */
-          '-ms-user-select': 'none', /* Internet Explorer */
-          '-khtml-user-select': 'none', /* KHTML browsers (e.g. Konqueror) */
-          '-webkit-user-select': 'none', /* Chrome, Safari, and Opera */
-          '-webkit-touch-callout': 'none', /* Disable Android and iOS callouts*/
-        },
         '@font-face': [IRANSans_light, IRANSans_regular, IRANSans_bold] as any,
         'body': {
           direction: 'rtl',

@@ -1,4 +1,4 @@
-import { Button, Container, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Container, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { fetchProductsDetails } from 'features/products/productsSlice';
 import React from 'react'
 import { IoChevronBackOutline } from 'react-icons/io5';
@@ -7,7 +7,9 @@ import { useParams } from 'react-router'
 import { useAppDispatch, useAppSelector } from 'store'
 import { splitAmount } from 'lib';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs } from 'swiper';
+import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper';
+import WithRatioBox from "components/WithRatioBox";
+import { openLightBox } from 'features/imageLightBox/imageLightBoxSlice';
 
 const useStyles = makeStyles(theme=> ({
     arrows: {
@@ -23,18 +25,46 @@ const useStyles = makeStyles(theme=> ({
         padding: theme.spacing(1.5,0)
     },
     bodyText: {
-        lineHeight: '34px',
+        lineHeight: '35px',
         whiteSpace: 'pre-wrap',
     },
-    breadCrumbs: {
+    swiper: {
+        '--swiper-navigation-size': '18px',
+        '--swiper-theme-color': '#fff',
+        '--swiper-pagination-color': '#fff',
+        '--swiper-pagination-bullet-inactive-color': '#fff',
+        '--swiper-pagination-bullet-inactive-opacity': 0.4,
+        '& .swiper-pagination-bullet': {
+            transition: 'transform .36s ease,background-color .36s ease,-webkit-transform .36s ease'
+        },
+        '& .swiper-pagination-bullet-active': {
+            transform: 'scale(1.25)'
+        },
         marginBottom: theme.spacing(2)
     },
-    swiper: {
-
+    galleryImage: {
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.shadows[1],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        cursor: 'pointer',
+        backgroundColor: theme.palette.grey[200]
     },
     swiperThumbs: {
-
+        '& .swiper-slide': {
+            opacity: 0.5,
+            transition: 'opacity .36s ease',
+        },
+        '& .swiper-slide-thumb-active': {
+            opacity: 1,
+        }
     },
+    loading: {
+        position: 'absolute',
+        top: '30%',
+        left: '50%',
+        transform: 'translate(-50%,50%)'
+    }
 }))
 
 const ProductDetails = () => {
@@ -43,16 +73,24 @@ const ProductDetails = () => {
     product = useAppSelector( state=> state.products.details[productId] ),
     classes = useStyles(),
     [thumbsSwiper, setThumbsSwiper] = React.useState(null),
-    dispatch = useAppDispatch();
+    dispatch = useAppDispatch(),
+    produnctPhotos = React.useMemo( ()=> (
+        product && product.photos.map( (src, index)=> `${src}/${product.id*(index+2)}` )
+    ), [product]);
+
+    const showGalleryLightBox = React.useCallback( (index: number)=> {
+        dispatch( openLightBox({ images: produnctPhotos, currentIndex: index }) )
+    }, [produnctPhotos, dispatch]);
 
     React.useEffect(()=> {
         dispatch( fetchProductsDetails(productId) )
     }, [productId, dispatch]);
 
-    return product ? (
+    return product 
+    ? (
         <Container maxWidth='md' disableGutters>
-            <Grid container direction='row-reverse' justifyContent='space-between' spacing={2}>
-                <Grid item container spacing={1} className={classes.breadCrumbs}>
+            <Grid container direction='row-reverse' justifyContent='space-between' spacing={5}>
+                <Grid item container spacing={1}>
                     {
                         [...new Array(3)].map(()=> (
                             <React.Fragment>
@@ -73,32 +111,41 @@ const ProductDetails = () => {
                 <Grid item xs={12} md={6}>
                     <Swiper
                         spaceBetween={10}
-                        navigation={true}
+                        navigation
+                        pagination={{ clickable: true }}
                         thumbs={{ swiper: thumbsSwiper }}
-                        modules={[FreeMode, Navigation, Thumbs]}
+                        modules={[FreeMode, Navigation, Thumbs, Pagination]}
                         className={classes.swiper}
                     >
                         {
-                            product.photos.map( (src, index)=> (
-                                <SwiperSlide>
-                                    <img src={`${src}/${product.id*(index+2)}`} alt={`عکس ${index+1}`} />
+                            produnctPhotos.map( (src, index)=> (
+                                <SwiperSlide onClick={()=> showGalleryLightBox(index)}>
+                                    <WithRatioBox
+                                        aspectRatio='1/1' 
+                                        style={{ backgroundImage: `url(${src})` }}
+                                        className={classes.galleryImage} 
+                                    />
                                 </SwiperSlide>
                             ))
                         }
                     </Swiper>
                     <Swiper
                         onSwiper={setThumbsSwiper as any}
-                        spaceBetween={10}
-                        slidesPerView={4}
+                        spaceBetween={16}
+                        slidesPerView={5}
                         freeMode={true}
                         watchSlidesProgress={true}
                         modules={[FreeMode, Navigation, Thumbs]}
                         className={classes.swiperThumbs}
                     >
                         {
-                            product.photos.map( (src, index)=> (
+                            produnctPhotos.map( (src, index)=> (
                                 <SwiperSlide>
-                                    <img src={`${src}/${product.id*(index+2)}`} alt={`عکس ${index+1}`} />
+                                    <WithRatioBox
+                                        aspectRatio='1/1' 
+                                        style={{ backgroundImage: `url(${src})` }}
+                                        className={classes.galleryImage} 
+                                    />
                                 </SwiperSlide>
                             ))
                         }
@@ -153,7 +200,17 @@ const ProductDetails = () => {
                 </Grid>
             </Grid>
         </Container>
-    ) : null
+    ) 
+    : (
+        <Grid container direction='column' justifyContent='center' alignItems='center' className={classes.loading}>
+            <Grid item>
+                <CircularProgress size={25} thickness={6} color='inherit' />
+            </Grid>
+            <Grid item>
+                <Typography>در حال دریافت...</Typography>
+            </Grid>
+        </Grid>
+    )
 }
 
 export default ProductDetails
